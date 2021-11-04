@@ -1,0 +1,38 @@
+---
+title: "Excess Deaths"
+author: "Manuel Alcalá Kovalski"
+date: "11/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup}
+librarian::shelf(tidyverse, readxl, ggtext, ggbrookings)
+```
+
+## Excess Deaths 
+
+```{r load-data}
+deaths <- read_csv("data/historical-data.csv")
+```
+
+```{r adams-county}
+deaths %>% 
+  filter(cs_name %in% c("De Soto", "Lee", "Lamar", "Jones", "Hinds")) %>% 
+  pivot_longer(cols = c(total_deaths, fitted_deaths)) %>% 
+  ggplot(aes(x = year, y = value, color = name)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(. ~ cs_name, scales = "free_y") +
+  labs(title = "Excess COVID deaths",
+       subtitle = "A nice looking chart for Dillon",
+       x = NULL,
+       y = NULL,
+       caption = "Source: Dillon's email") +
+  ggthemes::theme_hc() 
+  
+```
+
